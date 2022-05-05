@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<DefineConstants>WINDOWS</DefineConstants>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Foundation\Runtimes\linux-x64\" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+		<ContentWithTargetPath Include=".\Foundation\Runtimes\win-x64\SDL2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>SDL2.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include=".\Foundation\Runtimes\win-x64\BGFXD.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>BGFXD.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include=".\Foundation\Runtimes\win-x64\BGFX.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>BGFX.dll</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BinaryPack" Version="1.0.3" />
+	</ItemGroup>
+
+	<Import Project="..\PRANASHARED\PRANASHARED.projitems" Label="Shared" />
+
+</Project>

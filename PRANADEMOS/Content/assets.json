@@ -1,0 +1,15 @@
+﻿{
+  "shaders": {
+    "BaseShader": {
+      "id": "BaseShader",
+      "vs_path": "Base/Shaders/canvas_vs.sc",
+      "fs_path": "Base/Shaders/canvas_fs.sc"
+    }
+  },
+  "images": {
+    "commander_keen": {
+      "id": "commander_keen",
+      "path": "Base/Images/commander_keen.png"
+    } 
+  } 
+}

@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRANATK", "PRANATK\PRANATK.csproj", "{768B065A-0DBB-4DB2-8040-C4A591440388}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRANADEMOS", "PRANADEMOS\PRANADEMOS.csproj", "{DA3E4FE3-24E0-46C1-B814-F9CC2C5FDBBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRANACLI", "PRANACLI\PRANACLI.csproj", "{A4868797-2EC6-4842-88CD-57C5F380DB47}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PRANASHARED", "PRANASHARED\PRANASHARED.shproj", "{28D65390-2730-4B85-9C94-06C66C58EFD3}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PRANASHARED\PRANASHARED.projitems*{28d65390-2730-4b85-9c94-06c66c58efd3}*SharedItemsImports = 13
+		PRANASHARED\PRANASHARED.projitems*{768b065a-0dbb-4db2-8040-c4a591440388}*SharedItemsImports = 5
+		PRANASHARED\PRANASHARED.projitems*{a4868797-2ec6-4842-88cd-57c5f380db47}*SharedItemsImports = 5
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{768B065A-0DBB-4DB2-8040-C4A591440388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{768B065A-0DBB-4DB2-8040-C4A591440388}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{768B065A-0DBB-4DB2-8040-C4A591440388}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{768B065A-0DBB-4DB2-8040-C4A591440388}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA3E4FE3-24E0-46C1-B814-F9CC2C5FDBBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA3E4FE3-24E0-46C1-B814-F9CC2C5FDBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA3E4FE3-24E0-46C1-B814-F9CC2C5FDBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA3E4FE3-24E0-46C1-B814-F9CC2C5FDBBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4868797-2EC6-4842-88CD-57C5F380DB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4868797-2EC6-4842-88CD-57C5F380DB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4868797-2EC6-4842-88CD-57C5F380DB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4868797-2EC6-4842-88CD-57C5F380DB47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56B8569A-C442-4B78-8242-890918BE499F}
+	EndGlobalSection
+EndGlobal
