@@ -2,17 +2,12 @@
 
 namespace PRANA;
 
-public class VertexBuffer : RenderResource
+public class VertexBuffer
 {
     internal Bgfx.VertexBufferHandle Handle { get; }
 
-    internal VertexBuffer(string id, Bgfx.VertexBufferHandle  handle) : base(id)
+    internal VertexBuffer(Bgfx.VertexBufferHandle  handle)
     {
         Handle = handle;
-    }
-
-    protected override void Free()
-    {
-        Graphics.DestroyVertexBuffer(this);
     }
 }

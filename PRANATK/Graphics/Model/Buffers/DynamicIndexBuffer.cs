@@ -2,11 +2,11 @@
 
 namespace PRANA;
 
-public class DynamicIndexBuffer : RenderResource
+public class DynamicIndexBuffer
 {
     internal Bgfx.DynamicIndexBufferHandle Handle { get; }
 
-    internal DynamicIndexBuffer(string id, Bgfx.DynamicIndexBufferHandle handle) : base(id)
+    internal DynamicIndexBuffer(Bgfx.DynamicIndexBufferHandle handle)
     {
         Handle = handle;
     }
@@ -14,10 +14,5 @@ public class DynamicIndexBuffer : RenderResource
     public void Update(int startIndex, Span<ushort> indices)
     {
         Graphics.UpdateDynamicIndexBuffer(this, startIndex, indices);
-    }
-
-    protected override void Free()
-    {
-        Graphics.DestroyDynamicIndexBuffer(this);
     }
 }

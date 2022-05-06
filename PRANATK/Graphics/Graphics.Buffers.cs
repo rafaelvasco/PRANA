@@ -5,14 +5,12 @@ namespace PRANA;
 
 public static unsafe partial class Graphics
 {
-    public static VertexBuffer CreateVertexBuffer(string id, Span<VertexPCT> vertices, VertexLayout layout)
+    public static VertexBuffer CreateVertexBuffer(Span<VertexPCT> vertices, VertexLayout layout)
     {
         var memory = Bgfx.GetMemoryBufferReference(vertices);
         var handle = Bgfx.CreateVertexBuffer(memory, &layout.Handle, (ushort)Bgfx.BufferFlags.None);
 
-        var vertexBuffer = new VertexBuffer(id, handle);
-
-        RegisterGraphicsResource(vertexBuffer);
+        var vertexBuffer = new VertexBuffer(handle);
 
         return vertexBuffer;
     }
@@ -25,14 +23,12 @@ public static unsafe partial class Graphics
         }
     }
 
-    public static IndexBuffer CreateIndexBuffer(string id, Span<ushort> indices)
+    public static IndexBuffer CreateIndexBuffer(Span<ushort> indices)
     {
         var memory = Bgfx.GetMemoryBufferReference(indices);
         var handle = Bgfx.CreateIndexBuffer(memory, (ushort)Bgfx.BufferFlags.None);
 
-        var indexBuffer = new IndexBuffer(id, handle);
-
-        RegisterGraphicsResource(indexBuffer);
+        var indexBuffer = new IndexBuffer(handle);
 
         return indexBuffer;
     }
@@ -45,26 +41,22 @@ public static unsafe partial class Graphics
         }
     }
 
-    public static DynamicVertexBuffer CreateDynamicVertexBuffer(string id, int vertexCount, VertexLayout layout)
+    public static DynamicVertexBuffer CreateDynamicVertexBuffer(int vertexCount, VertexLayout layout)
     {
         var handle = Bgfx.CreateDynamicVertexBuffer((uint)vertexCount, &layout.Handle, (ushort)Bgfx.BufferFlags.None);
 
-        var buffer = new DynamicVertexBuffer(id, handle);
-
-        RegisterGraphicsResource(buffer);
+        var buffer = new DynamicVertexBuffer(handle);
 
         return buffer;
     }
 
-    public static DynamicVertexBuffer CreateDynamicVertexBuffer(string id, Span<VertexPCT> vertices, VertexLayout layout)
+    public static DynamicVertexBuffer CreateDynamicVertexBuffer(Span<VertexPCT> vertices, VertexLayout layout)
     {
         var memory = Bgfx.GetMemoryBufferReference(vertices);
 
         var handle = Bgfx.CreateDynamicVertexBufferMem(memory, &layout.Handle, (ushort)Bgfx.BufferFlags.None);
 
-        var buffer = new DynamicVertexBuffer(id, handle);
-
-        RegisterGraphicsResource(buffer);
+        var buffer = new DynamicVertexBuffer(handle);
 
         return buffer;
     }
@@ -84,26 +76,22 @@ public static unsafe partial class Graphics
         }
     }
 
-    public static DynamicIndexBuffer CreateDynamicIndexBuffer(string id, int indexCount)
+    public static DynamicIndexBuffer CreateDynamicIndexBuffer(int indexCount)
     {
         var handle = Bgfx.CreateDynamicIndexBuffer((uint)indexCount, (ushort)Bgfx.BufferFlags.AllowResize);
 
-        var buffer = new DynamicIndexBuffer(id, handle);
-
-        RegisterGraphicsResource(buffer);
+        var buffer = new DynamicIndexBuffer(handle);
 
         return buffer;
     }
 
-    public static DynamicIndexBuffer CreateDynamicIndexBuffer(string id, Span<ushort> indices)
+    public static DynamicIndexBuffer CreateDynamicIndexBuffer(Span<ushort> indices)
     {
         var memory = Bgfx.GetMemoryBufferReference(indices);
 
         var handle = Bgfx.CreateDynamicIndexBufferMem(memory, (ushort)Bgfx.BufferFlags.None);
 
-        var buffer = new DynamicIndexBuffer(id, handle);
-
-        RegisterGraphicsResource(buffer);
+        var buffer = new DynamicIndexBuffer(handle);
 
         return buffer;
     }

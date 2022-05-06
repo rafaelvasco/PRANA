@@ -4,7 +4,7 @@ namespace PRANA;
 
 public static unsafe partial class Graphics
 {
-    internal static Shader CreateShader(string id, byte[] vertexSource, byte[] fragSource, string[] samplers, string[] parameters)
+    internal static Shader CreateShader(byte[] vertexSource, byte[] fragSource, string[] samplers, string[] parameters)
     {
         static Bgfx.ShaderHandle CreateShaderSource(byte[] bytes)
         {
@@ -70,7 +70,7 @@ public static unsafe partial class Graphics
 
     internal static void SubmitShader(Shader shader)
     {
-        for (int i = 0; i <= shader.Samplers.Length; ++i)
+        for (int i = 0; i <= shader.TextureSlotCount; ++i)
         {
             var sampler = shader.Samplers[i];
 

@@ -1,6 +1,6 @@
 ﻿namespace PRANA;
 
-public interface IMesh
+public interface IVertexStream
 {
     int VertexCount { get;}
     int IndexCount { get;}

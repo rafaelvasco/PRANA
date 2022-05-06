@@ -9,6 +9,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Content\BaseAssets\Shaders\BaseSprite\BaseSprite.pnb" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Content\BaseAssets\Shaders\BaseSprite\BaseSprite.pnb" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Folder Include="Foundation\Runtimes\linux-x64\" />
 	</ItemGroup>
 	
@@ -29,6 +37,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="BinaryPack" Version="1.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Content\assets.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<Import Project="..\PRANASHARED\PRANASHARED.projitems" Label="Shared" />

@@ -15,22 +15,10 @@
     <None Update="Content\assets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\Base\Images\commander_keen.pnb">
+    <None Update="Content\Images\commander_keen.pnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\Base\Images\commander_keen.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Base\Shaders\BaseShader.pnb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Base\Shaders\canvas_fs.sc">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Base\Shaders\canvas_vs.sc">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\Base\Shaders\varying.def.sc">
+    <None Update="Content\Images\commander_keen.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>

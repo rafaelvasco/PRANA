@@ -36,6 +36,12 @@ public class Texture2D : Asset, IEquatable<Texture2D>
     {
         var pixmap = new Pixmap(width, height);
 
+        return Create(id, pixmap, tiled, filter);
+    }
+
+    public static Texture2D Create(string id, Pixmap pixmap, bool tiled = false,
+        TextureFilter filter = TextureFilter.NearestNeighbor)
+    {
         var texture = Graphics.CreateTexture2D(pixmap, tiled, filter);
 
         Content.RegisterAsset(id, texture);

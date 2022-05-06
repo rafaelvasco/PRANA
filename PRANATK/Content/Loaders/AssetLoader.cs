@@ -1,10 +1,15 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using BinaryPack;
 
 namespace PRANA;
 
 
 internal static partial class AssetLoader
 {
+    private const string EmbeddedAssetsNamespace = "PRANATK.Content.BaseAssets";
+
     private static readonly JsonSerializerOptions serializerOptions = new()
     {
         WriteIndented = true
@@ -57,6 +62,8 @@ internal static partial class AssetLoader
 
     public static T Load<T>(string assetId) where T : Asset
     {
+        T asset;
+
         if (assetId == null)
         {
             throw new ArgumentNullException(nameof(assetId));
@@ -64,15 +71,89 @@ internal static partial class AssetLoader
 
         if (typeof(T) == typeof(Texture2D))
         {
-            return LoadTexture(assetId) as T;
+            asset = LoadTexture(assetId) as T;
         }
-
-        if (typeof(T) == typeof(Shader))
+        else if (typeof(T) == typeof(Shader))
         {
-            return LoadShader(assetId) as T;
+            asset = LoadShader(assetId) as T;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid asset type: ", nameof(T));
         }
 
-        throw new ArgumentException("Invalid asset type: ", nameof(T));
+        Content.RegisterAsset(assetId, asset);
+
+        return asset;
     }
 
+    public static T LoadStream<T>(Stream stream) where T : struct
+    {
+        var data = BinaryConverter.Deserialize<T>(stream);
+
+        return data;
+    }
+
+    public static T LoadEmbedded<T>(string assetId) where T : Asset
+    {
+        if (assetId == null)
+        {
+            throw new ArgumentNullException(nameof(assetId));
+        }
+
+        T asset;
+
+        if (typeof(T) == typeof(Texture2D))
+        {
+            var path = new StringBuilder();
+
+            path.Append(EmbeddedAssetsNamespace);
+            path.Append(".Images.");
+            path.Append(assetId);
+            path.Append('.');
+            path.Append(assetId);
+            path.Append(ContentGlobals.BinaryExt);
+
+            using var fileStream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream(path.ToString());
+
+            if (fileStream == null)
+            {
+                throw new ApplicationException($"Could not load embedded asset: {assetId}");
+            }
+
+            asset = LoadTexture(fileStream) as T;
+        }
+
+        else if (typeof(T) == typeof(Shader))
+        {
+            var path = new StringBuilder();
+
+            path.Append(EmbeddedAssetsNamespace);
+            path.Append(".Shaders.");
+            path.Append(assetId);
+            path.Append('.');
+            path.Append(assetId);
+            path.Append(ContentGlobals.BinaryExt);
+
+            using var fileStream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream(path.ToString());
+
+            if (fileStream == null)
+            {
+                throw new ApplicationException($"Could not load embedded asset: {assetId}");
+            }
+
+            asset = LoadShader(fileStream, "") as T;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid asset type: ", nameof(T));
+        }
+
+        Content.RegisterAsset(assetId, asset);
+
+        return asset;
+
+    }
 }

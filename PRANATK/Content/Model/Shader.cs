@@ -77,6 +77,8 @@ public class Shader : Asset
 
     internal ShaderParameter[] Parameters { get; }
 
+    internal int TextureSlotCount => _textureIndex;
+
     private readonly Dictionary<string, int> _paramsMap;
 
     private int _textureIndex;
@@ -108,53 +110,53 @@ public class Shader : Asset
         }
     }
 
-    internal unsafe void Apply()
-    {
+    //internal unsafe void Apply()
+    //{
 
-        switch (_textureIndex)
-        {
-            case 0 when Samplers[0].Texture != null:
-                Bgfx.SetTexture(0, Samplers[0].Handle, Samplers[0].Texture!.Handle, (uint)Samplers[0].Texture!.SamplerFlags);
-                break;
-            case > 0:
-            {
-                for (int i = 0; i < _textureIndex; ++i)
-                {
-                    if (Samplers[i].Texture != null)
-                    {
-                        var texture = Samplers[i].Texture;
-                        Bgfx.SetTexture((byte)i, Samplers[i].Handle, texture!.Handle, (uint)texture.SamplerFlags);
-                    }
-                }
+    //    switch (_textureIndex)
+    //    {
+    //        case 0 when Samplers[0].Texture != null:
+    //            Bgfx.SetTexture(0, Samplers[0].Handle, Samplers[0].Texture!.Handle, (uint)Samplers[0].Texture!.SamplerFlags);
+    //            break;
+    //        case > 0:
+    //        {
+    //            for (int i = 0; i < _textureIndex; ++i)
+    //            {
+    //                if (Samplers[i].Texture != null)
+    //                {
+    //                    var texture = Samplers[i].Texture;
+    //                    Bgfx.SetTexture((byte)i, Samplers[i].Handle, texture!.Handle, (uint)texture.SamplerFlags);
+    //                }
+    //            }
 
-                break;
-            }
-        }
+    //            break;
+    //        }
+    //    }
 
-        if (Parameters == null)
-        {
-            return;
-        }
+    //    if (Parameters == null)
+    //    {
+    //        return;
+    //    }
 
-        for (int i = 0; i < Parameters.Length; ++i)
-        {
-            var p = Parameters[i];
+    //    for (int i = 0; i < Parameters.Length; ++i)
+    //    {
+    //        var p = Parameters[i];
 
-            if (p.Constant)
-            {
-                if (p.SubmitedOnce)
-                {
-                    continue;
-                }
+    //        if (p.Constant)
+    //        {
+    //            if (p.SubmitedOnce)
+    //            {
+    //                continue;
+    //            }
 
-                p.SubmitedOnce = true;
-            }
+    //            p.SubmitedOnce = true;
+    //        }
 
-            var val = p.Value;
+    //        var val = p.Value;
 
-            Bgfx.SetUniform(p.Handle, Unsafe.AsPointer(ref val), 1);
-        }
-    }
+    //        Bgfx.SetUniform(p.Handle, Unsafe.AsPointer(ref val), 1);
+    //    }
+    //}
 
     public ShaderParameter GetParam(string name)
     {

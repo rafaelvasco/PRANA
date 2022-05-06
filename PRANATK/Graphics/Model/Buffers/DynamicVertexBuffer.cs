@@ -2,11 +2,11 @@
 
 namespace PRANA;
 
-public class DynamicVertexBuffer : RenderResource
+public class DynamicVertexBuffer
 {
     internal Bgfx.DynamicVertexBufferHandle Handle { get; }
 
-    internal DynamicVertexBuffer(string id, Bgfx.DynamicVertexBufferHandle handle) : base(id)
+    internal DynamicVertexBuffer(Bgfx.DynamicVertexBufferHandle handle)
     {
         Handle = handle;
     }
@@ -14,10 +14,5 @@ public class DynamicVertexBuffer : RenderResource
     public void Update(int startVertex, Span<VertexPCT> vertices)
     {
         Graphics.UpdateDynamicVertexBuffer(this, startVertex, vertices);
-    }
-
-    protected override void Free()
-    {
-        Graphics.DestroyDynamicVertexBuffer(this);
     }
 }

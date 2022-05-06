@@ -60,7 +60,7 @@ public static unsafe partial class Graphics
 
         defaultView.SetBackColor(Color.Black);
         defaultView.SetViewport(0, 0, _backBufferWidth, _backBufferHeight);
-        defaultView.SetProjection(Transform.CreateOrthographicOffCenter(0f, _backBufferWidth, _backBufferHeight, 0f, -1000.0f, 1000.0f));
+        defaultView.SetProjection(Transform.CreateOrthographicOffCenter(0f, _backBufferWidth, _backBufferHeight, 0f, 0.0f, 1000.0f));
         defaultView.SetTransform(Transform.Identity);
 
         return defaultView;
@@ -68,11 +68,15 @@ public static unsafe partial class Graphics
 
 
     private static int _backBufferWidth;
+    
     private static int _backBufferHeight;
+    
     private static MSAALevel _msaaLevel = MSAALevel.None;
+    
     private static bool _vSync = true;
 
     private static Bgfx.StateFlags _renderState = Bgfx.StateFlags.WriteRgb | Bgfx.StateFlags.WriteA;
+    
     private static Bgfx.ResetFlags _graphicsFlags = Bgfx.ResetFlags.None;
 
     private static bool _graphicsFlagsChanged;
@@ -85,8 +89,7 @@ public static unsafe partial class Graphics
 
     private static Shader _defaultShader;
 
-
-    private static readonly List<RenderResource> _graphicsResources = new(16);
+    private static readonly List<RenderResource> _renderResources = new(16);
 
 
     internal static void Init(int backbufferWidth, int backbufferHeight)
@@ -133,7 +136,7 @@ public static unsafe partial class Graphics
         Bgfx.Init(&init);
 
         Bgfx.SetViewRect(0, 0, 0, (ushort)_backBufferWidth, (ushort)_backBufferHeight);
-        Bgfx.SetViewClear(0, (ushort)Bgfx.ClearFlags.Color, Color.DodgerBlue.Rgba, 0f, 1);
+        Bgfx.SetViewClear(0, (ushort)Bgfx.ClearFlags.Color, Color.Black.Rgba, 0f, 1);
 
         #if DEBUG
 
@@ -146,7 +149,7 @@ public static unsafe partial class Graphics
 
     internal static void LoadDefaultResources()
     {
-        _defaultShader = Content.Get<Shader>("BaseShader");
+        _defaultShader = AssetLoader.LoadEmbedded<Shader>("BaseSprite");
 
         if (_defaultShader == null)
         {
@@ -162,7 +165,7 @@ public static unsafe partial class Graphics
 
         Blitter.End();
 
-        _primitiveTexture = Texture2D.Create("primitiveTexture", 1, 1);
+        _primitiveTexture = Texture2D.Create("primitiveTexture", pixmap);
         _drawTexture = _primitiveTexture;
     }
 
@@ -176,7 +179,7 @@ public static unsafe partial class Graphics
     public static void ApplyRenderView(RenderView view)
     {
         _currentViewId = view.Id;
-        Bgfx.SetViewClear(view.Id, (ushort)(Bgfx.ClearFlags.Color | Bgfx.ClearFlags.Depth), view.ClearColor, 1f, 0);
+        Bgfx.SetViewClear(view.Id, (ushort)(Bgfx.ClearFlags.Color | Bgfx.ClearFlags.Depth), view.ClearColor.Rgba, 1f, 0);
         Bgfx.SetViewRect(view.Id, (ushort)view.ViewRect.Left, (ushort)view.ViewRect.Top, (ushort)view.ViewRect.Width, (ushort)view.ViewRect.Height);
         Bgfx.SetViewScissor(view.Id, (ushort)view.ViewRect.Left, (ushort)view.ViewRect.Top, (ushort)view.ViewRect.Width, (ushort)view.ViewRect.Height);
         Bgfx.SetViewTransform(view.Id, Unsafe.AsPointer(ref view._viewMatrix.M11), Unsafe.AsPointer(ref view._projMatrix.M11));
@@ -193,10 +196,9 @@ public static unsafe partial class Graphics
         _drawTexture = texture ?? _primitiveTexture;
     }
 
-
-    public static void Submit(IMesh mesh, Shader shader = null, PrimitiveType type = PrimitiveType.Triangles)
+    public static void Draw(IVertexStream vertexStream, Shader shader = null, PrimitiveType type = PrimitiveType.Triangles)
     {
-        if (mesh.VertexCount == 0)
+        if (vertexStream.VertexCount == 0)
         {
             return;
         }
@@ -207,9 +209,9 @@ public static unsafe partial class Graphics
 
         shader!.SetTexture(0, _drawTexture!);
 
-        shader.Apply();
+        SubmitShader(shader);
 
-        mesh.Submit();
+        vertexStream.Submit();
 
         Bgfx.SetState((ulong)renderFlags, 0);
 
@@ -218,17 +220,18 @@ public static unsafe partial class Graphics
 
     internal static void Shutdown()
     {
-        foreach (var graphicsResource in _graphicsResources)
+        foreach (var renderResource in _renderResources)
         {
-            graphicsResource.Dispose();
+            Console.WriteLine($"Disposing RenderResource: {renderResource.Id}");
+            renderResource.Dispose();
         }
 
         Bgfx.Shutdown();
     }
 
-    internal static void RegisterGraphicsResource(RenderResource resource)
+    internal static void RegisterRenderResource(RenderResource resource)
     {
-        _graphicsResources.Add(resource);
+        _renderResources.Add(resource);
     }
 
     internal static void Present()

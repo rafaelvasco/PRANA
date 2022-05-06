@@ -50,8 +50,6 @@ public static class Content
 
         var asset = AssetLoader.Load<T>(assetId);
 
-        RegisterAsset(assetId, asset);
-      
         return asset;
     }
 

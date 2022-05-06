@@ -20,11 +20,7 @@ public struct RenderState
 
     internal Bgfx.StateFlags State { get; private set; }
 
-    private readonly Bgfx.StateFlags _base = Bgfx.StateFlags.WriteRgb |
-                                             Bgfx.StateFlags.WriteA |
-                                             Bgfx.StateFlags.WriteZ |
-                                             Bgfx.StateFlags.DepthTestLequal |
-                                             Bgfx.StateFlags.Msaa;
+    private const Bgfx.StateFlags _base = Bgfx.StateFlags.WriteRgb | Bgfx.StateFlags.WriteA | Bgfx.StateFlags.WriteZ | Bgfx.StateFlags.DepthTestLequal | Bgfx.StateFlags.Msaa;
 
     private Bgfx.StateFlags _blendState;
 
@@ -37,35 +33,24 @@ public struct RenderState
 
     public void SetBlendMode(BlendMode mode)
     {
-        switch (mode)
+        _blendState = mode switch
         {
-            case BlendMode.Solid:
-                _blendState = 0x0;
-                break;
-            case BlendMode.Mask:
-                _blendState = Bgfx.StateFlags.BlendAlphaToCoverage;
-                break;
-            case BlendMode.Add:
-                _blendState = Bgfx.BGFX_STATE_BLEND_FUNC_SEPARATE(Bgfx.StateFlags.BlendSrcAlpha, Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendOne);
-                break;
-            case BlendMode.Alpha:
-                _blendState = Bgfx.BGFX_STATE_BLEND_FUNC_SEPARATE(Bgfx.StateFlags.BlendSrcAlpha, Bgfx.StateFlags.BlendInvSrcAlpha, Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendInvSrcAlpha);
-                break;
-            case BlendMode.AlphaPre:
-                _blendState = Bgfx.BGFX_STATE_BLEND_FUNC(Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendInvSrcAlpha);
-                break;
-            case BlendMode.Multiply:
-                _blendState = Bgfx.BGFX_STATE_BLEND_FUNC(Bgfx.StateFlags.BlendDstColor, Bgfx.StateFlags.BlendZero);
-                break;
-            case BlendMode.Light:
-                _blendState = Bgfx.BGFX_STATE_BLEND_FUNC_SEPARATE(Bgfx.StateFlags.BlendDstColor, Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendZero, Bgfx.StateFlags.BlendOne);
-                break;
-            case BlendMode.Invert:
-                _blendState = Bgfx.BGFX_STATE_BLEND_FUNC(Bgfx.StateFlags.BlendInvDstColor, Bgfx.StateFlags.BlendInvSrcColor);
-                break;
-        }
+            BlendMode.Solid => 0x0,
+            BlendMode.Mask => Bgfx.StateFlags.BlendAlphaToCoverage,
+            BlendMode.Add => Bgfx.BGFX_STATE_BLEND_FUNC_SEPARATE(Bgfx.StateFlags.BlendSrcAlpha,
+                Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendOne),
+            BlendMode.Alpha => Bgfx.BGFX_STATE_BLEND_FUNC_SEPARATE(Bgfx.StateFlags.BlendSrcAlpha,
+                Bgfx.StateFlags.BlendInvSrcAlpha, Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendInvSrcAlpha),
+            BlendMode.AlphaPre =>
+                Bgfx.BGFX_STATE_BLEND_FUNC(Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendInvSrcAlpha),
+            BlendMode.Multiply => Bgfx.BGFX_STATE_BLEND_FUNC(Bgfx.StateFlags.BlendDstColor, Bgfx.StateFlags.BlendZero),
+            BlendMode.Light => Bgfx.BGFX_STATE_BLEND_FUNC_SEPARATE(Bgfx.StateFlags.BlendDstColor,
+                Bgfx.StateFlags.BlendOne, Bgfx.StateFlags.BlendZero, Bgfx.StateFlags.BlendOne),
+            BlendMode.Invert => Bgfx.BGFX_STATE_BLEND_FUNC(Bgfx.StateFlags.BlendInvDstColor,
+                Bgfx.StateFlags.BlendInvSrcColor),
+            _ => _blendState
+        };
 
         State = _base | _blendState;
-
     }
 }
