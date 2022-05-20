@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PRANA.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": " Build -g C:\\Dev\\C#\\PRANA\\PRANA.Demos\\"
+    }
+  }
+}

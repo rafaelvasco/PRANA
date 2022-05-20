@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<DefineConstants>WINDOWS</DefineConstants>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Content\BaseAssets\Images\Logo.pnb" />
+	  <None Remove="Content\BaseAssets\Shaders\BaseSprite\BaseSprite_D3D.pnb" />
+	  <None Remove="Content\BaseAssets\Shaders\BaseSprite\BaseSprite_GL.pnb" />
+	  <None Remove="Content\BaseAssets\Shaders\ImGui\ImGui_D3D.pnb" />
+	  <None Remove="Content\BaseAssets\Shaders\ImGui\ImGui_GL.pnb" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Content\BaseAssets\Images\Logo.pnb" />
+	  <EmbeddedResource Include="Content\BaseAssets\Shaders\BaseSprite\BaseSprite_D3D.pnb" />
+	  <EmbeddedResource Include="Content\BaseAssets\Shaders\BaseSprite\BaseSprite_GL.pnb" />
+	  <None Remove="Content\BaseAssets\Fonts\MonoGram.pnb" />
+	  <EmbeddedResource Include="Content\BaseAssets\Fonts\MonoGram.pnb" />
+	  <EmbeddedResource Include="Content\BaseAssets\Shaders\ImGui\ImGui_D3D.pnb" />
+	  <EmbeddedResource Include="Content\BaseAssets\Shaders\ImGui\ImGui_GL.pnb" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PRANA.Common\PRANA.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+		<ContentWithTargetPath Condition=" '$(Configuration)'=='Release' " Include=".\Runtime\win-x64\BGFX.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>BGFX.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Condition=" '$(Configuration)'=='Debug' " Include=".\Runtime\win-x64\BGFXD.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>BGFXD.dll</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Content\assets.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="ImGui.NET" Version="1.87.3" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+{
+  "WindowSize": {
+    "Width": 1280,
+    "Height": 720
+  },
+  "WindowTitle": "PRANA Game",
+  "StartFullscreen": false,
+  "WindowBorderMode": 0,
+  "TransparentFrameBuffer": false,
+  "VSync": false,
+  "Multisamples": -1,
+  "TargetFps": 60
+}

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Runtime\linux-x64\" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+		<ContentWithTargetPath Include=".\Runtime\win-x64\SDL2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>SDL2.dll</TargetPath>
+		</ContentWithTargetPath>
+		<ContentWithTargetPath Include=".\Runtime\win-x64\SDL2_ttf.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<TargetPath>SDL2_ttf.dll</TargetPath>
+		</ContentWithTargetPath>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BinaryPack" Version="1.0.3" />
+	</ItemGroup>
+
+</Project>

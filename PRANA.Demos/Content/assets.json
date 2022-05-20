@@ -1,0 +1,35 @@
+﻿{
+  "images": {
+    "commander_keen": {
+      "id": "commander_keen",
+      "path": "Images/commander_keen.png"
+    },
+    "background": {
+      "id": "background",
+      "path": "Images/background.png"
+    }
+  },
+  "fonts": {
+    "LinLibertine": {
+      "id": "LinLibertine",
+      "path": "Fonts/LinLibertine_DR.ttf",
+      "size": 36,
+      "char_ranges": [ "BasicLatin", "Latin1Supplement" ],
+      "filtered": true
+    },
+    "ChiKareGo2": {
+      "id": "ChiKareGo2",
+      "path": "Fonts/ChiKareGo2.ttf",
+      "size": 36,
+      "char_ranges": [ "BasicLatin" ],
+      "filtered": false
+    },
+    "EnterCommand": {
+      "id": "EnterCommand",
+      "path": "Fonts/EnterCommand.ttf",
+      "size": 36,
+      "char_ranges": [ "BasicLatin" ],
+      "filtered": false
+    }
+  }
+}

@@ -1,9 +1,0 @@
-﻿{
-  "shaders": {
-    "BaseSprite": {
-      "id": "BaseSprite",
-      "vs_path": "BaseAssets/Shaders/BaseSprite/baseSprite_vs.sc",
-      "fs_path": "BaseAssets/Shaders/BaseSprite/baseSprite_fs.sc"
-    }
-  }
-}

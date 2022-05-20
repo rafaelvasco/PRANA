@@ -1,0 +1,29 @@
+﻿{
+  "images": {
+    "Logo": {
+      "id": "Logo",
+      "path": "BaseAssets/Images/prana_logo.png"
+    }
+  },
+  "shaders": {
+    "BaseSprite": {
+      "id": "BaseSprite",
+      "vs_path": "BaseAssets/Shaders/BaseSprite/baseSprite_vs.sc",
+      "fs_path": "BaseAssets/Shaders/BaseSprite/baseSprite_fs.sc"
+    },
+    "ImGui": {
+      "id": "ImGui",
+      "vs_path": "BaseAssets/Shaders/ImGui/imGui_vs.sc",
+      "fs_path": "BaseAssets/Shaders/ImGui/imGui_fs.sc"
+    }
+  },
+  "fonts": {
+    "MonoGram": {
+      "id": "MonoGram",
+      "path": "BaseAssets/Fonts/monogram-extended.ttf",
+      "size": 16,
+      "char_ranges": [ "BasicLatin", "Latin1Supplement" ],
+      "filtered": false
+    }
+  }
+}
