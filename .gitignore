@@ -37,6 +37,7 @@ bld/
 #wwwroot/
 
 .vscode/
+.idea/
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
