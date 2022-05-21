@@ -11,7 +11,7 @@ public class ClearDemo : Scene
 
     public override void Load()
     {
-        _view = Graphics.CreateDefaultView();
+        _view = Graphics.CreateView();
 
         _view.ClearColor = Color.Red;
 

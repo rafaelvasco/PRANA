@@ -13,8 +13,6 @@ internal static partial class Platform
 
     private static int _mWheelValue;
 
-    public static bool ButtonPosEventPoolEnabled { get; set; } = false;
-
     public static MouseState GetMouseState()
     {
         uint flags;
@@ -69,27 +67,29 @@ internal static partial class Platform
 
     private static void ProcessMouseEvent(SDL_Event evt)
     {
-        if (ButtonPosEventPoolEnabled)
+        if (!Input.EnableMouse)
         {
-            var button = TranslatePlatformMouseButton(evt.button.button);
+            return;
+        }
 
-            switch (evt.type)
-            {
-                case SDL_EventType.SDL_MOUSEMOTION:
-                    MouseMove(evt.motion.x, evt.motion.y);
-                    break;
-                case SDL_EventType.SDL_MOUSEBUTTONDOWN:
-                    MouseDown(button);
-                    break;
-                case SDL_EventType.SDL_MOUSEBUTTONUP:
-                    MouseUp(button);
-                    break;
-            }
+        var button = TranslatePlatformMouseButton(evt.button.button);
+
+        switch (evt.type)
+        {
+            case SDL_EventType.SDL_MOUSEMOTION:
+                MouseMove(evt.motion.x, evt.motion.y);
+                break;
+            case SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                MouseDown(button);
+                break;
+            case SDL_EventType.SDL_MOUSEBUTTONUP:
+                MouseUp(button);
+                break;
         }
 
         if (evt.type == SDL_EventType.SDL_MOUSEWHEEL)
         {
-            _mWheelValue = evt.wheel.y * 120;
+            _mWheelValue += evt.wheel.y * 120;
         }
     }
 

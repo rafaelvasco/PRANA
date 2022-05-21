@@ -4,18 +4,15 @@ namespace PRANA;
 
 public struct RenderView
 {
-    private static ushort _staticId;
-
     public Matrix Transform;
     public Matrix ProjectionMatrix;
     public Color ClearColor;
     public Rectangle ViewRect;
+    public ushort Order { get; }
 
-    internal ushort Id { get; }
-
-    public RenderView()
+    internal RenderView(ushort order)
     {
-        Id = _staticId++;
+        Order = order;
         Transform = Matrix.Identity;
         ProjectionMatrix = Matrix.Identity;
         ClearColor = Color.Blue;

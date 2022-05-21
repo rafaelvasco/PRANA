@@ -29,7 +29,7 @@ public class DynamicTriangle : Scene
         colV2Target = Color.Cyan;
         colV3Target = Color.Violet;
 
-        _view = Graphics.CreateDefaultView();
+        _view = Graphics.CreateView();
 
         _state = RenderState.Default;
 

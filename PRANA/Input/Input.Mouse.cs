@@ -34,7 +34,7 @@ public struct MouseState
         internal set;
     }
 
-    public Vector2 Position => new Vector2(X, Y);
+    public Vector2 Position => new(X, Y);
 
     /// <summary>
     /// Gets state of the left mouse button.
@@ -212,15 +212,7 @@ public static partial class Input
 
     public static bool IsMouseOver { get; internal set; }
 
-    public static bool ProcessMouseMoveEvents
-    {
-        get => Platform.ButtonPosEventPoolEnabled;
-        set => Platform.ButtonPosEventPoolEnabled = value;
-    }
-
     public static bool EnableMouse { get; set; } = true;
-
-    public static int CurrentMouseWheel => _msState.ScrollWheelValue;
 
     public static ref MouseState Mouse => ref _msState;
 
@@ -247,11 +239,13 @@ public static partial class Input
 
         Platform.MouseEnterWindow = () =>
         {
+            IsMouseOver = true;
             OnMouseEnter?.Invoke();
         };
 
         Platform.MouseLeaveWindow = () =>
         {
+            IsMouseOver = false;
             OnMouseLeave?.Invoke();
         };
     }

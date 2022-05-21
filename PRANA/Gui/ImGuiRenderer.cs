@@ -1,39 +1,26 @@
 ﻿using ImGuiNET;
-using PRANA.Common;
 
 namespace PRANA;
 
-public unsafe class ImGuiController : IDisposable
+internal unsafe class ImGuiRenderer
 {
     private readonly Shader _shader;
-    private RenderView _viewport;
 
     private readonly Dictionary<IntPtr, Texture2D> _loadedTextures;
 
     private int _textureId;
     private IntPtr? _fontTextureId;
 
-    private int _scrollWheelValue;
-
     private readonly VertexLayout _vertexLayout;
-
-    private readonly List<int> _keys = new();
-
-    private readonly IntPtr _imguiContext;
 
     private readonly int _vertexByteSize = sizeof(ImDrawVert);
 
     private Texture2D _imguiTexture;
 
 
-    public ImGuiController()
+    public ImGuiRenderer()
     {
-        _imguiContext = ImGui.CreateContext();
-        ImGui.SetCurrentContext(_imguiContext);
-
         _loadedTextures = new Dictionary<IntPtr, Texture2D>();
-
-        _viewport = Graphics.CreateDefaultView();
 
         _shader = Content.Get<Shader>("ImGui");
 
@@ -48,8 +35,6 @@ public unsafe class ImGuiController : IDisposable
         _vertexLayout.End();
 
         RebuildFontAtlas();
-
-        SetupInput();
     }
 
     private void RebuildFontAtlas()
@@ -69,7 +54,7 @@ public unsafe class ImGuiController : IDisposable
         _fontTextureId = BindTexture(_imguiTexture);
 
         io.Fonts.SetTexID(_fontTextureId.Value);
-        io.Fonts.ClearTexData(); // Clears CPU side texture data
+        io.Fonts.ClearTexData();
     }
 
     public IntPtr BindTexture(Texture2D texture)
@@ -86,90 +71,11 @@ public unsafe class ImGuiController : IDisposable
         _loadedTextures.Remove(textureId);
     }
 
-    public void Begin(GameTime gameTime)
-    {
-        PerFrameUpdate(gameTime);
-
-        ImGui.NewFrame();
-    }
-
-    public void End()
+    public void Present()
     {
         ImGui.Render();
 
         RenderDrawData(ImGui.GetDrawData());
-    }
-
-
-    private void SetupInput()
-    {
-        var io = ImGui.GetIO();
-
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Tab] = (int)Key.Tab);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Key.Left);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Key.Right);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Key.Up);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Key.Down);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.PageUp] = (int)Key.PageUp);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.PageDown] = (int)Key.PageDown);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Home] = (int)Key.Home);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.End] = (int)Key.End);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Delete] = (int)Key.Delete);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Backspace] = (int)Key.Back);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Enter] = (int)Key.Enter);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Escape] = (int)Key.Escape);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Space] = (int)Key.Space);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.A] = (int)Key.A);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.C] = (int)Key.C);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.V] = (int)Key.V);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.X] = (int)Key.X);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Y] = (int)Key.Y);
-        _keys.Add(io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z);
-
-        Input.OnTextInput += args =>
-        {
-            Console.WriteLine($"Char Input: {args.Character}");
-
-            if (args.Character == '\t')
-            {
-                return;
-            }
-
-            io.AddInputCharacter(args.Character);
-        };
-
-        ImGui.GetIO().Fonts.AddFontDefault();
-    }
-
-
-    private void PerFrameUpdate(GameTime gameTime)
-    {
-        var io = ImGui.GetIO();
-
-        ImGui.GetIO().DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-        for (int i = 0; i < _keys.Count; i++)
-        {
-            io.KeysDown[_keys[i]] = Input.KeyDown((Key)_keys[i]);
-        }
-
-        io.KeyShift = Input.KeyDown(Key.LeftShift) || Input.KeyDown(Key.RightShift);
-        io.KeyCtrl = Input.KeyDown(Key.LeftControl) || Input.KeyDown(Key.RightControl);
-        io.KeyAlt = Input.KeyDown(Key.LeftAlt) || Input.KeyDown(Key.RightAlt);
-        io.KeySuper = Input.KeyDown(Key.LeftWindows) || Input.KeyDown(Key.RightWindows);
-
-        io.DisplaySize = new System.Numerics.Vector2(Graphics.BackBufferWidth, Graphics.BackBufferHeight);
-        io.DisplayFramebufferScale = new System.Numerics.Vector2(1f, 1f);
-
-        io.MousePos = new System.Numerics.Vector2(Input.Mouse.X, Input.Mouse.Y);
-
-        io.MouseDown[0] = Input.Mouse.Left;
-        io.MouseDown[1] = Input.Mouse.Right;
-        io.MouseDown[2] = Input.Mouse.Middle;
-
-        var scrollDelta = Input.Mouse.ScrollWheelValue - _scrollWheelValue;
-        io.MouseWheel = scrollDelta > 0 ? 1 : scrollDelta < 0 ? -1 : 0;
-        _scrollWheelValue = Input.Mouse.ScrollWheelValue;
     }
 
     /// <summary>
@@ -177,17 +83,12 @@ public unsafe class ImGuiController : IDisposable
     /// </summary>
     private void RenderDrawData(ImDrawDataPtr drawData)
     {
-        var io = ImGui.GetIO();
-
-        Graphics.ApplyRenderState(RenderState.Default);
+        if (drawData.TotalVtxCount == 0)
+        {
+            return;
+        }
 
         drawData.ScaleClipRects(ImGui.GetIO().DisplayFramebufferScale);
-
-        _viewport.ProjectionMatrix =
-            Matrix.CreateOrthographicOffCenter(0f, io.DisplaySize.X, io.DisplaySize.Y, 0f, -1f, 1f);
-        _viewport.ViewRect = new Rectangle(0, 0, Graphics.BackBufferWidth, Graphics.BackBufferHeight);
-
-        Graphics.ApplyRenderView(_viewport);
 
         RenderCommandLists(drawData);
     }
@@ -195,17 +96,11 @@ public unsafe class ImGuiController : IDisposable
 
     private void RenderCommandLists(ImDrawDataPtr drawData)
     {
-        TransientIndexBuffer idxBuffer = default;
-        TransientVertexBuffer vtxBuffer = default;
+        TransientIndexBuffer idxBuffer;
+        TransientVertexBuffer vtxBuffer;
 
         void UpdateBuffers()
         {
-            if (drawData.TotalVtxCount == 0)
-            {
-                return;
-            }
-
-
             int vtxOffset = 0;
             int idxOffset = 0;
 
@@ -231,12 +126,6 @@ public unsafe class ImGuiController : IDisposable
                 idxOffset += cmdList.IdxBuffer.Size;
             }
 
-        }
-
-
-        if (drawData.TotalVtxCount == 0)
-        {
-            return;
         }
 
         UpdateBuffers();
@@ -286,11 +175,5 @@ public unsafe class ImGuiController : IDisposable
             vtxOffset += cmdList.VtxBuffer.Size;
             idxOffset += cmdList.IdxBuffer.Size;
         }
-    }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-        ImGui.DestroyContext(_imguiContext);
     }
 }

@@ -721,13 +721,12 @@ public static partial class Input
     {
         _gpState = new GamePadState[GamepadMaxCount];
 
+		//TODO:
         //var gamepad_mappings_text_file = Engine.Content.Get<TextFile>("gamecontrollerdb");
 
         //var gamepad_mappings_text_content = gamepad_mappings_text_file.JoinedText;
 
         //Platform.SetGamePadMappingsFile(gamepad_mappings_text_content);
-
-        //Platform.PreLookForGamepads();
 
         Platform.PreLookForGamepads();
 

@@ -9,8 +9,8 @@ namespace PRANADEMOS;
 
 public class ImGuiDemo : Scene
 {
-    private ImGuiController _imguiController;
     private NumVec3 _clearColor = new(114f / 255f, 144f / 255f, 154f / 255f);
+    private RenderView _guiView;
     private bool _showTestWindow;
     private bool _showAnotherWindow;
     private readonly byte[] _textBuffer = new byte[100];
@@ -20,15 +20,9 @@ public class ImGuiDemo : Scene
 
     public override void Load()
     {
-        _imguiController = new ImGuiController();
         _logo = Content.Get<Texture2D>("Logo");
-        _logoImguiHandle = _imguiController.BindTexture(_logo);
-
-    }
-
-    public override void Unload()
-    {
-        _imguiController.Dispose();
+        _logoImguiHandle = ImGuiController.BindTexture(_logo);
+        _guiView = Graphics.CreateView();
     }
 
     public override void Update(GameTime time)
@@ -37,7 +31,15 @@ public class ImGuiDemo : Scene
 
     public override void Draw(GameTime time)
     {
-        _imguiController.Begin(time);
+    }
+
+    public override void DrawImGui(GameTime time)
+    {
+        _guiView.ClearColor = _clearColor;
+
+        Graphics.ApplyRenderState(RenderState.Default);
+
+        Graphics.ApplyRenderView(_guiView);
 
         ImGui.Text("Hello World!");
         ImGui.SliderFloat("float", ref f, 0.0f, 1.0f, string.Empty);
@@ -64,8 +66,5 @@ public class ImGuiDemo : Scene
             ImGui.SetNextWindowPos(new NumVec2(650, 20), ImGuiCond.FirstUseEver);
             ImGui.ShowDemoWindow(ref _showTestWindow);
         }
-
-        _imguiController.End();
-
     }
 }

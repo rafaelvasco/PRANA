@@ -6,7 +6,7 @@ namespace PRANA;
 
 public partial class Game : IDisposable
 {
-    public GameSettings Settings => _settings;
+    public static GameSettings Settings => _instance._settings;
 
     public static (int Width, int Height) WindowSize
     {
@@ -105,6 +105,8 @@ public partial class Game : IDisposable
 
         Input.Init();
 
+        ImGuiController.Init();
+
         GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 
         _emptyScene = new EmptyScene();
@@ -131,6 +133,8 @@ public partial class Game : IDisposable
                 Content.Free();
                 
                 _current_scene?.Unload();
+
+                ImGuiController.Shutdown();
 
                 Graphics.Shutdown();
 

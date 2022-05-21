@@ -783,5 +783,15 @@ public struct Vector4 : IEquatable<Vector4>
         return value1;
     }
 
+    public static implicit operator System.Numerics.Vector4(Vector4 vec)
+    {
+        return new System.Numerics.Vector4(vec.X, vec.Y, vec.Z, vec.W);
+    }
+
+    public static implicit operator Vector4(System.Numerics.Vector4 vec)
+    {
+        return new Vector4(vec.X, vec.Y, vec.Z, vec.W);
+    }
+
     #endregion
 }

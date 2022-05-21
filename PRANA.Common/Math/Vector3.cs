@@ -950,5 +950,15 @@ public struct Vector3 : IEquatable<Vector3>
         return value;
     }
 
+    public static implicit operator System.Numerics.Vector3(Vector3 v)
+    {
+        return new System.Numerics.Vector3(v.X, v.Y, v.Z);
+    }
+
+    public static implicit operator Vector3(System.Numerics.Vector3 v)
+    {
+        return new Vector3(v.X, v.Y, v.Z);
+    }
+
     #endregion
 }

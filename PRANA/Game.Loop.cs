@@ -208,6 +208,13 @@ public partial class Game
     private static void DoDraw(Scene scene, GameTime gameTime)
     {
         scene.Draw(gameTime);
+
+        ImGuiController.BeginGui(gameTime);
+
+        scene.DrawImGui(gameTime);
+
+        ImGuiController.PresentGui();
+
         Graphics.Present();
     }
 

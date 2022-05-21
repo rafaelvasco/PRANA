@@ -5,7 +5,7 @@ namespace PRANA;
 
 public struct TextInputEventArgs
 {
-    public TextInputEventArgs(char character, Key key = PRANA.Key.None)
+    public TextInputEventArgs(char character, Key key = Key.None)
     {
         Character = character;
         Key = key;
@@ -216,6 +216,11 @@ internal static partial class Platform
 
     private static void ProcessKeyEvent(SDL_Event evt)
     {
+        if (!Input.EnableKeyboard)
+        {
+            return;
+        }
+
         switch (evt.type)
         {
             case SDL_EventType.SDL_KEYDOWN:

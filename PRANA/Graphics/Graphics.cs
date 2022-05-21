@@ -49,9 +49,9 @@ public static unsafe partial class Graphics
 
     public static int BackBufferHeight => _backBufferHeight;
 
-    public static RenderView CreateDefaultView()
+    public static RenderView CreateView(ushort order = 0)
     {
-        var defaultView = new RenderView()
+        var view = new RenderView(order: order)
         {
             ClearColor = Color.Black,
             ViewRect = new Rectangle(0, 0, _backBufferWidth, _backBufferHeight),
@@ -60,7 +60,7 @@ public static unsafe partial class Graphics
             Transform = Matrix.Identity
         };
 
-        return defaultView;
+        return view;
     }
 
     private static int _backBufferWidth;
@@ -168,16 +168,16 @@ public static unsafe partial class Graphics
 
     public static void ApplyRenderView(RenderView view)
     {
-        _currentViewId = view.Id;
-        Bgfx.SetViewClear(view.Id, (ushort)(Bgfx.ClearFlags.Color | Bgfx.ClearFlags.Depth), view.ClearColor.Rgba, 1f,
+        _currentViewId = view.Order;
+        Bgfx.SetViewClear(view.Order, (ushort)(Bgfx.ClearFlags.Color | Bgfx.ClearFlags.Depth), view.ClearColor.Rgba, 1f,
             1);
-        Bgfx.SetViewRect(view.Id, (ushort)view.ViewRect.Left, (ushort)view.ViewRect.Top, (ushort)view.ViewRect.Width,
+        Bgfx.SetViewRect(view.Order, (ushort)view.ViewRect.Left, (ushort)view.ViewRect.Top, (ushort)view.ViewRect.Width,
             (ushort)view.ViewRect.Height);
-        Bgfx.SetViewScissor(view.Id, (ushort)view.ViewRect.Left, (ushort)view.ViewRect.Top, (ushort)view.ViewRect.Width,
+        Bgfx.SetViewScissor(view.Order, (ushort)view.ViewRect.Left, (ushort)view.ViewRect.Top, (ushort)view.ViewRect.Width,
             (ushort)view.ViewRect.Height);
-        Bgfx.SetViewTransform(view.Id, Unsafe.AsPointer(ref view.Transform.M11),
+        Bgfx.SetViewTransform(view.Order, Unsafe.AsPointer(ref view.Transform.M11),
             Unsafe.AsPointer(ref view.ProjectionMatrix.M11));
-        Bgfx.Touch(view.Id);
+        Bgfx.Touch(view.Order);
     }
 
     public static void ApplyRenderState(RenderState state)

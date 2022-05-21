@@ -16,7 +16,7 @@ public class DrawTextLowLevel : Scene
 
     public override void Load()
     {
-        _view = Graphics.CreateDefaultView();
+        _view = Graphics.CreateView();
 
         _state = RenderState.Default;
 

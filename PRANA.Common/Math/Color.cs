@@ -1080,23 +1080,6 @@ public struct Color : IEquatable<Color>
         return Abgr == other.Abgr;
     }
 
-    /// <summary>
-    /// Gets a <see cref="Vector3"/> representation for this object.
-    /// </summary>
-    /// <returns>A <see cref="Vector3"/> representation for this object.</returns>
-    public Vector3 ToVector3()
-    {
-        return new Vector3(R / 255.0f, G / 255.0f, B / 255.0f);
-    }
-
-    /// <summary>
-    /// Gets a <see cref="Vector4"/> representation for this object.
-    /// </summary>
-    /// <returns>A <see cref="Vector4"/> representation for this object.</returns>
-    public Vector4 ToVector4()
-    {
-        return new Vector4(R / 255.0f, G / 255.0f, B / 255.0f, A / 255.0f);
-    }
 
     public static implicit operator uint(Color color)
     {
@@ -1106,6 +1089,42 @@ public struct Color : IEquatable<Color>
     public static implicit operator Color(uint value)
     {
         return new Color(value);
+    }
+
+    public static implicit operator Vector4(Color color)
+    {
+        return new Vector4(color.Rf, color.Gf, color.Bf, color.Af);
+    }
+
+    public static implicit operator System.Numerics.Vector4(Color color)
+    {
+        return new System.Numerics.Vector4(color.Rf, color.Gf, color.Bf, color.Af);
+
+    }
+
+    public static implicit operator System.Numerics.Vector3(Color color)
+    {
+        return new System.Numerics.Vector3(color.Rf, color.Gf, color.Bf);
+    }
+
+    public static implicit operator Color(Vector3 vec)
+    {
+        return new Color(vec.X, vec.Y, vec.Z);
+    }
+
+    public static implicit operator Color(System.Numerics.Vector3 vec)
+    {
+        return new Color(vec.X, vec.Y, vec.Z);
+    }
+
+    public static implicit operator Color(Vector4 vec)
+    {
+        return new Color(vec.X, vec.Y, vec.Z, vec.W);
+    }
+
+    public static implicit operator Color(System.Numerics.Vector4 vec)
+    {
+        return new Color(vec.X, vec.Y, vec.Z, vec.W);
     }
 
     /// <summary>

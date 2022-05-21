@@ -15,7 +15,7 @@ public class HelloQuad : Scene
     {
         _texture = Content.Get<Texture2D>("commander_keen");
 
-        _view = Graphics.CreateDefaultView();
+        _view = Graphics.CreateView();
 
         _state = RenderState.Default;
 

@@ -16,7 +16,7 @@ public class CubeDemo : Scene
 
     public override void Load()
     {
-        _view = Graphics.CreateDefaultView();
+        _view = Graphics.CreateView();
 
         _texture = Content.Get<Texture2D>("commander_keen");
 
